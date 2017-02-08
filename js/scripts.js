@@ -1,23 +1,24 @@
+var allQuestions;
+var request = new XMLHttpRequest();
+request.open('GET', 'js/questions.json', true);
+request.onload = function() {
+  if (request.status >= 200 && request.status < 400) {
+    allQuestions = JSON.parse(request.responseText);
+  } else {}
+};
+
+request.onerror = function() {};
+request.send();
+
 window.onload=function(){
-
-  // Only one question is in this array, but you will add all the questions
-  var allQuestions = [
-  	{question: "Who is Prime Minister of the United Kingdom?",
-    choices: ["David Cameron1", "Gordon Brown", "Winston Churchill", "Tony Blair"],
-    correctAnswer:0},
-    {question: "Who are you?",
-    choices: ["David Cameron2", "Gordon Brown", "Winston Churchill", "Tony Blair"],
-    correctAnswer:1},
-    {question: "Who am I?",
-    choices: ["David Cameron3", "Gordon Brown", "Winston Churchill", "Tony Blair"],
-    correctAnswer:2},
-  ];
-
+  
   var questionCounter = allQuestions.length;
   var correctAnswerCounter = 0;
   var currentQuestion = 0;
+  var isFirstQuestion = true;
   var isLastQuestion = false;
   var nextButton = document.getElementById('next');
+  var prevButton = document.getElementById('prev');
   var choicesWrapper = document.getElementById('choices');
   var questionWrapper = document.getElementById('question');
   var msgWrapper = document.getElementById('msg');
@@ -29,20 +30,22 @@ window.onload=function(){
   }
 
   function displayQuestion(questionNum){
-    questionWrapper.innerHTML = allQuestions[questionNum].question;  
-    clearNode(choicesWrapper);
+    if (0 <= questionNum < allQuestions.length) {
+      questionWrapper.innerHTML = allQuestions[questionNum].question;  
+      clearNode(choicesWrapper);
 
-    for(var i=0; i < allQuestions[questionNum].choices.length; i++){
-      var inputnode = document.createElement("input");
-      inputnode.setAttribute("type","radio");
-      inputnode.setAttribute("name","answer");
-      inputnode.setAttribute("value",i);
-      var brnode = document.createElement("br");
-      var textnode = document.createTextNode(allQuestions[questionNum].choices[i].toString());
-      choicesWrapper.appendChild(inputnode);
-      choicesWrapper.appendChild(textnode);
-      choicesWrapper.appendChild(brnode);
-    }  
+      for(var i=0; i < allQuestions[questionNum].choices.length; i++){
+        var inputnode = document.createElement("input");
+        inputnode.setAttribute("type","radio");
+        inputnode.setAttribute("name","answer");
+        inputnode.setAttribute("value",i);
+        var brnode = document.createElement("br");
+        var textnode = document.createTextNode(allQuestions[questionNum].choices[i].toString());
+        choicesWrapper.appendChild(inputnode);
+        choicesWrapper.appendChild(textnode);
+        choicesWrapper.appendChild(brnode);
+      }  
+    }
   }
 
   function checkAnswer(questionNum){
@@ -60,8 +63,8 @@ window.onload=function(){
   }
 
   nextButton.onclick = function(){
-
     if(choicesWrapper.querySelector('input[name="answer"]:checked')){
+      isFirstQuestion = false;
       clearNode(msgWrapper);
       checkAnswer(currentQuestion);
       if(currentQuestion < (questionCounter-1)){
@@ -73,6 +76,17 @@ window.onload=function(){
       }
     } else {
       msgWrapper.innerHTML = "Please choose an option";
+    }
+  };
+
+  prevButton.onclick = function(){
+    if (!isFirstQuestion){
+      currentQuestion--;
+      displayQuestion(currentQuestion);
+      if (currentQuestion <= 0){
+        currentQuestion = 0;
+        isFirstQuestion = true;
+      }
     }
   };
 

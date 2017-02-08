@@ -3,10 +3,26 @@ form {
   width: 300px;
 }
 
-.next-button {
-  padding: 5px 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
+.button {
+	box-sizing: border-box;
+	padding: 5px 10px;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 47%;
 }
+
+.prev-button {
+	float: left;
+	background: #efefef;
+}
+
+.next-button {
+	float: right;
+	background: #e1e1e1;
+}
+
+#question {margin: 20px 0}
+
+#choices {margin-bottom: 20px}
