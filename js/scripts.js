@@ -11,12 +11,10 @@ request.onerror = function() {};
 request.send();
 
 window.onload=function(){
-  
+
   var questionCounter = allQuestions.length;
-  var correctAnswerCounter = 0;
   var currentQuestion = 0;
   var isFirstQuestion = true;
-  var isLastQuestion = false;
   var nextButton = document.getElementById('next');
   var prevButton = document.getElementById('prev');
   var choicesWrapper = document.getElementById('choices');
@@ -35,30 +33,39 @@ window.onload=function(){
       clearNode(choicesWrapper);
 
       for(var i=0; i < allQuestions[questionNum].choices.length; i++){
-        var inputnode = document.createElement("input");
-        inputnode.setAttribute("type","radio");
-        inputnode.setAttribute("name","answer");
-        inputnode.setAttribute("value",i);
-        var brnode = document.createElement("br");
+        var inputnode = document.createElement('input');
+        inputnode.setAttribute('type','radio');
+        inputnode.setAttribute('name','answer');
+        inputnode.setAttribute('value',i);
+        var brnode = document.createElement('br');
         var textnode = document.createTextNode(allQuestions[questionNum].choices[i].toString());
         choicesWrapper.appendChild(inputnode);
         choicesWrapper.appendChild(textnode);
         choicesWrapper.appendChild(brnode);
-      }  
+      }
+      displayUserAnswer(questionNum);
     }
   }
 
-  function checkAnswer(questionNum){
-    var correctAnswerValue = Number(allQuestions[questionNum].correctAnswer);
-    var selectedAnswerValue = Number(choicesWrapper.querySelector('input[name="answer"]:checked').value);
-    if(correctAnswerValue === selectedAnswerValue){
-     correctAnswerCounter++;
+  function storeUserAnswer(questionNum){
+    allQuestions[questionNum].userAnswer = Number(choicesWrapper.querySelector('input[name="answer"]:checked').value);
+  }
+
+  function displayUserAnswer(questionNum){
+    if (allQuestions[questionNum].userAnswer != "undefined"){
+      choicesWrapper.getElementsByTagName('input').item(allQuestions[questionNum].userAnswer).setAttribute('checked','checked');
     }
   }
 
-  function displayScore(score){
+  function displayScore(){
   	clearNode(choicesWrapper);
     clearNode(questionWrapper);
+    var score = 0;
+    allQuestions.forEach(function(question){
+      if (question.userAnswer === question.correctAnswer){
+        score++;
+      }
+    });
     msgWrapper.innerHTML = "Your score: "+score;    
   }
 
@@ -66,13 +73,12 @@ window.onload=function(){
     if(choicesWrapper.querySelector('input[name="answer"]:checked')){
       isFirstQuestion = false;
       clearNode(msgWrapper);
-      checkAnswer(currentQuestion);
+      storeUserAnswer(currentQuestion);
       if(currentQuestion < (questionCounter-1)){
         currentQuestion++;
         displayQuestion(currentQuestion);
       } else {
-        isLastQuestion = true;
-        displayScore(correctAnswerCounter);
+        displayScore();
       }
     } else {
       msgWrapper.innerHTML = "Please choose an option";
