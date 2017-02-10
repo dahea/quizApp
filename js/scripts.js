@@ -54,7 +54,7 @@ window.onload=function(){
   }
 
   function displayUserAnswer(questionNum){
-    if (allQuestions[questionNum].userAnswer != "undefined"){
+    if (allQuestions[questionNum].userAnswer != null){
       choicesWrapper.getElementsByTagName('input').item(allQuestions[questionNum].userAnswer).setAttribute('checked','checked');
     }
   }

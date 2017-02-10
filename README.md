@@ -17,10 +17,9 @@ serve
 - add a “Back” button to allow the user to go back and change answer
 - show the radio button selected for question.
 
-###specs to add
+###specs to add  
 
 set 1:
-- 
 - Add user authentication: allow users log in, and save their login credentials to local storage (HTML5 browser storage).
 - Use cookies to remember the user, and show a “Welcome, First Name” message when the user returns to the quiz.
 
