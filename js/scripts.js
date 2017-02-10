@@ -1,18 +1,6 @@
-var allQuestions;
-var request = new XMLHttpRequest();
-request.open('GET', 'js/questions.json', true);
-request.onload = function() {
-  if (request.status >= 200 && request.status < 400) {
-    allQuestions = JSON.parse(request.responseText);
-  } else {}
-};
-
-request.onerror = function() {};
-request.send();
-
 window.onload=function(){
-
-  var questionCounter = allQuestions.length;
+  var allQuestions;
+  var questionCounter;
   var currentQuestion = 0;
   var isFirstQuestion = true;
   var nextButton = document.getElementById('next');
@@ -20,6 +8,20 @@ window.onload=function(){
   var choicesWrapper = document.getElementById('choices');
   var questionWrapper = document.getElementById('question');
   var msgWrapper = document.getElementById('msg');
+  var request = new XMLHttpRequest();
+
+  request.open('GET', 'js/questions.json', true);
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 400) {
+      allQuestions = JSON.parse(request.responseText);
+      questionCounter = allQuestions.length;
+      displayQuestion(currentQuestion);
+
+    } else {}
+  };
+
+  request.onerror = function() {};
+  request.send();
 
   function clearNode(node){
   	while (node.hasChildNodes()) {
@@ -95,7 +97,4 @@ window.onload=function(){
       }
     }
   };
-
-  displayQuestion(currentQuestion);
-
 }
