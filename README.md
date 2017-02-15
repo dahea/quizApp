@@ -16,13 +16,9 @@ serve
 - store the quiz questions in an external JSON file.
 - add a “Back” button to allow the user to go back and change answer
 - show the radio button selected for question.
+- add Handlebars.js templating to the quiz
 
 ###specs to add  
-
-set 1:
 - Add user authentication: allow users log in, and save their login credentials to local storage (HTML5 browser storage).
 - Use cookies to remember the user, and show a “Welcome, First Name” message when the user returns to the quiz.
-
-set 2:
-- Learn Handlebars.js and add Handlebars.js templating to the quiz. You should no longer have any HTML in your JavaScript code. Your quiz is getting more advanced bit by bit.
 - Keep a record of all the users who take the quiz and show each user how her score ranks amongst the scores from other quiz takers.

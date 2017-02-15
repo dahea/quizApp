@@ -5,6 +5,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
+  <script type="text/javascript" src="/js/handlebars.js"></script>
   <script type="text/javascript" src="/js/scripts.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 
@@ -12,10 +13,12 @@
 </head>
 
 <body>
-  <form>
+  <form id="quiz">
     <div id="msg"></div>
-<div id="question"></div>
-<div id="choices"></div>
+    <div id="question-wrapper"></div>
+
+    <div id="button-wrapper">
+
 
 <div id="prev" class="button prev-button">
 prev
@@ -25,7 +28,22 @@ prev
 <div id="next" class="button next-button">
 next
 </div>
+</div>
 </form>
+
+
+<script id="score-template" type="text/x-handlebars-template">
+  Your score is: {{score}}
+</script>
+
+<script id="question-template" type="text/x-handlebars-template">
+<div id="question">{{question}}</div>
+<div id="choices">
+{{#each choices}}
+	<input type="radio" name="answer" value="{{@index}}" /> {{this}}<br />
+{{/each}}
+</div>
+</script>
 
 
 </body>

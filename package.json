@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/dahea/quizApp/issues"
   },
-  "homepage": "https://github.com/dahea/quizApp#readme"
+  "homepage": "https://github.com/dahea/quizApp#readme",
+  "dependencies": {
+    "handlebars": "^4.0.6"
+  }
 }

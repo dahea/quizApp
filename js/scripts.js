@@ -1,15 +1,15 @@
 window.onload=function(){
   var allQuestions;
   var questionCounter;
+  var choicesWrapper;
   var currentQuestion = 0;
   var isFirstQuestion = true;
   var nextButton = document.getElementById('next');
   var prevButton = document.getElementById('prev');
-  var choicesWrapper = document.getElementById('choices');
-  var questionWrapper = document.getElementById('question');
   var msgWrapper = document.getElementById('msg');
-  var request = new XMLHttpRequest();
 
+// related to getting the Q's from json
+  var request = new XMLHttpRequest();
   request.open('GET', 'js/questions.json', true);
   request.onload = function() {
     if (request.status >= 200 && request.status < 400) {
@@ -23,6 +23,12 @@ window.onload=function(){
   request.onerror = function() {};
   request.send();
 
+// related to handlebars
+  var source = document.getElementById('question-template').innerHTML;
+  var template = Handlebars.compile(source);
+  
+// functions for the rest of the app
+
   function clearNode(node){
   	while (node.hasChildNodes()) {
       node.removeChild(node.lastChild);
@@ -31,20 +37,17 @@ window.onload=function(){
 
   function displayQuestion(questionNum){
     if (0 <= questionNum < allQuestions.length) {
-      questionWrapper.innerHTML = allQuestions[questionNum].question;  
-      clearNode(choicesWrapper);
+      clearNode(msgWrapper);
+      clearNode(document.getElementById('question-wrapper'));
+      var question = allQuestions[questionNum];
+      var html    = template(question);
 
-      for(var i=0; i < allQuestions[questionNum].choices.length; i++){
-        var inputnode = document.createElement('input');
-        inputnode.setAttribute('type','radio');
-        inputnode.setAttribute('name','answer');
-        inputnode.setAttribute('value',i);
-        var brnode = document.createElement('br');
-        var textnode = document.createTextNode(allQuestions[questionNum].choices[i].toString());
-        choicesWrapper.appendChild(inputnode);
-        choicesWrapper.appendChild(textnode);
-        choicesWrapper.appendChild(brnode);
-      }
+      var newContentNode = document.createElement('div');
+      newContentNode.innerHTML = html;
+      document.getElementById('question-wrapper').appendChild(newContentNode);
+
+      choicesWrapper = document.getElementById('choices');
+      
       displayUserAnswer(questionNum);
     }
   }
@@ -60,21 +63,27 @@ window.onload=function(){
   }
 
   function displayScore(){
-  	clearNode(choicesWrapper);
-    clearNode(questionWrapper);
-    var score = 0;
+  	clearNode(msgWrapper);
+    clearNode(document.getElementById('question-wrapper'));
+    var userScore = 0;
     allQuestions.forEach(function(question){
       if (question.userAnswer === question.correctAnswer){
-        score++;
+        userScore++;
       }
     });
-    msgWrapper.innerHTML = "Your score: "+score;    
+
+    var scoreSource = document.getElementById('score-template').innerHTML;
+    var scoreTemplate = Handlebars.compile(scoreSource);
+    var scoreVar = {score: userScore};
+    var scoreOutput = scoreTemplate(scoreVar);
+
+    msgWrapper.innerHTML = scoreOutput;  
+
   }
 
   nextButton.onclick = function(){
     if(choicesWrapper.querySelector('input[name="answer"]:checked')){
       isFirstQuestion = false;
-      clearNode(msgWrapper);
       storeUserAnswer(currentQuestion);
       if(currentQuestion < (questionCounter-1)){
         currentQuestion++;
@@ -97,4 +106,8 @@ window.onload=function(){
       }
     }
   };
+
+  displayQuestion;
 }
+
+
