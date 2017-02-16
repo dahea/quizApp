@@ -107,6 +107,12 @@ window.onload=function(){
     }
   };
 
+  if(localStorage.getItem('name') === null) {
+    var userName = prompt('What is your name?');
+    localStorage.setItem('name',userName);
+  } else {
+    alert('Welcome back '+localStorage.getItem('name'));
+  }
   displayQuestion;
 }
 
